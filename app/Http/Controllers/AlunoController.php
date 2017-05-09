@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Disciplina;
 use App\Aluno;
+use App\Nota;
 
 class AlunoController extends Controller
 {
@@ -27,7 +28,7 @@ class AlunoController extends Controller
       $alunos = $disciplina->alunos()->paginate($this->totalPage);
 
       $title = "Alunos da Disciplina {$disciplina->nome}";
-	  
+
 	  $disciplinas = Disciplina::pluck('nome', 'id');
 
       return view('instituicao.professor.alunos.alunos',compact('disciplina','alunos','title','caminhos','disciplinas'));
@@ -114,7 +115,7 @@ class AlunoController extends Controller
               ->paginate($this->totalPage);
 
       $disciplinas = Disciplina::pluck('nome', 'id');
-	 
+
 
       return view('instituicao.professor.alunos.alunos',compact('alunos','title','disciplinas', 'dataForm'));
     }
