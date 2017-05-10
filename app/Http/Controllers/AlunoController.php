@@ -17,7 +17,7 @@ class AlunoController extends Controller
      $this->aluno = $aluno;
     }
 
-    public function byDisciplinaId($id)
+    public function byDisciplinaId(Request $request, $id)
     {
       $caminhos = [
               ['url'=>'/home','titulo'=>'Home'],
@@ -28,8 +28,12 @@ class AlunoController extends Controller
       $alunos = $disciplina->alunos()->paginate($this->totalPage);
 
       $title = "Alunos da Disciplina {$disciplina->nome}";
+      //
+      // $alunos = Aluno::where('id',$request->segment(2))
+      //     ->pluck('nome', 'id');
 
-	  $disciplinas = Disciplina::pluck('nome', 'id');
+	    $disciplinas = Disciplina::where('id', $request->segment(2))
+                ->pluck('nome','id');
 
       return view('instituicao.professor.alunos.alunos',compact('disciplina','alunos','title','caminhos','disciplinas'));
     }
@@ -39,9 +43,18 @@ class AlunoController extends Controller
     {
       $title = "Cadastrando Aluno";
 
+      // $aluno = $this->aluno->find($id);
+
+      $caminhos = [
+              ['url'=>'/home','titulo'=>'Home'],
+              ['url'=>'/minhas-disciplinas','titulo'=>'Disciplinas'],
+              ['url'=>'','titulo'=>'Alunos'],
+              ['url'=>'','titulo'=>'Cadastro de Alunos'],
+      ];
+
       $disciplinas = Disciplina::pluck('nome','id');
 
-      return view('instituicao.professor.alunos.aluno-create',compact('title','disciplinas'));
+      return view('instituicao.professor.alunos.aluno-create',compact('title','disciplinas','caminhos'));
     }
 
 
@@ -82,7 +95,14 @@ class AlunoController extends Controller
 
       $disciplinas = Disciplina::pluck('nome','id');
 
-      return view('instituicao.professor.alunos.aluno-edit',compact('aluno','title','disciplinas'));
+      $caminhos = [
+              ['url'=>'/home','titulo'=>'Home'],
+              ['url'=>'/minhas-disciplinas','titulo'=>'Disciplinas'],
+              ['url'=>route('professor.disciplina.alunos',$aluno->disciplina_id),'titulo'=>'Alunos'],
+              ['url'=>'','titulo'=>'Edição de Alunos'],
+      ];
+
+      return view('instituicao.professor.alunos.aluno-edit',compact('aluno','title','disciplinas','caminhos'));
     }
 
 
@@ -110,13 +130,35 @@ class AlunoController extends Controller
       $keySearch = $dataForm['key-search'];
       $title = "Alunos desta disciplina - Resultados para {$keySearch}";
 
+      $caminhos = [
+              ['url'=>'/home','titulo'=>'Home'],
+              ['url'=>'/minhas-disciplinas','titulo'=>'Disciplinas'],
+              ['url'=>'','titulo'=>'Pesquisa Alunos'],
+      ];
+
+      // $nota = Nota::join('alunos','alunos.id','=','notas.aluno_id')
+      //             ->where('alunos.id',$request->segment(2))
+      //             ->select('notas.id',
+      //                      'notas.aluno_id',
+      //                      'notas.av3_1',
+      //                      'notas.av3_2',
+      //                      'notas.obs_av3_1',
+      //                      'notas.obs_av3_2',
+      //                      'notas.avi',
+      //                      'notas.av5'
+      //              )->get()->first();
+
+      $disciplinas = Disciplina::join('alunos','alunos.disciplina_id','=','disciplinas.id')
+                ->where('disciplina_id',$dataForm['disciplina'])
+                ->pluck('disciplinas.nome', 'disciplinas.id');
+
       $alunos = $aluno->where('disciplina_id',$dataForm['disciplina'])
               ->where('nome','LIKE',"%{$keySearch}%")
               ->paginate($this->totalPage);
 
-      $disciplinas = Disciplina::pluck('nome', 'id');
 
 
-      return view('instituicao.professor.alunos.alunos',compact('alunos','title','disciplinas', 'dataForm'));
+
+      return view('instituicao.professor.alunos.alunos',compact('alunos','title','disciplinas', 'dataForm','caminhos'));
     }
 }

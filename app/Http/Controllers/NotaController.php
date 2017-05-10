@@ -46,15 +46,14 @@ class NotaController extends Controller
           ->pluck('nome', 'id');
 
 
-      //  dd($alunos['nome']);
-
       $notas = $aluno->notas()->get();
 
       $caminhos = [
               ['url'=>'/home','titulo'=>'Home'],
               ['url'=>'/minhas-disciplinas','titulo'=>'Disciplinas'],
               ['url'=>route('professor.disciplina.alunos',$aluno->disciplina_id),'titulo'=>'Alunos'],
-              ['url'=>'','titulo'=>'Notas'],
+              ['url'=>route('professor.disciplina.alunos.notas',$aluno->id),'titulo'=>'Notas'],
+              ['url'=>'','titulo'=>'Cadastrando Notas'],
       ];
 
       $title = "NOTAS - {$aluno->nome}";
@@ -91,7 +90,8 @@ class NotaController extends Controller
               ['url'=>'/home','titulo'=>'Home'],
               ['url'=>'/minhas-disciplinas','titulo'=>'Disciplinas'],
               ['url'=>route('professor.disciplina.alunos',$aluno->disciplina_id),'titulo'=>'Alunos'],
-              ['url'=>'','titulo'=>'Notas'],
+              ['url'=>route('professor.disciplina.alunos.notas',$aluno->id),'titulo'=>'Notas'],
+              ['url'=>'','titulo'=>'Editando Notas'],
       ];
 
       $title = "NOTAS - {$aluno->nome}";

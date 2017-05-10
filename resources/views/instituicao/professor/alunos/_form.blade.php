@@ -1,5 +1,5 @@
 <div class="input-field col s12">
-    {!! Form::select('disciplina_id',$disciplinas,Request::segment(2), null) !!}
+    {!! Form::select('disciplina_id',$disciplinas, null) !!}
     {!! Form::label('disciplina_id', 'Disciplinas') !!}
 </div>
 

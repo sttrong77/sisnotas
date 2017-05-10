@@ -3,6 +3,8 @@
 @section('content')
 
 <div class="container">
+  <p><p>
+    @include('instituicao.professor._caminho')
   <h3>Editar Aluno: {{$aluno->nome}}</h3>
   <p><p>
   @if( session('error') )

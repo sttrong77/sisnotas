@@ -54,7 +54,7 @@
 
      <ul class="pagination">
        @if(isset($dataForm))
-        <li class="waves-effect">{!! $alunos->appends($dataForm)->links() !!}</li>
+        {!! $alunos->appends($dataForm)->links() !!}
        @else
          {!! $alunos->links() !!}
        @endif
