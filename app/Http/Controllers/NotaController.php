@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Nota;
 use App\Aluno;
 
+
 class NotaController extends Controller
 {
 
@@ -15,10 +16,11 @@ class NotaController extends Controller
      $this->nota = $nota;
     }
 
-    public function byAlunoId($id)
+    public function byAlunoId(Request $request, $id)
     {
 
       $aluno = Aluno::find($id);
+
       $notas = $aluno->notas()->get();
 
       $caminhos = [
@@ -30,24 +32,75 @@ class NotaController extends Controller
 
       $title = "NOTAS - {$aluno->nome}";
 
+      // dd($request->segment(2));
+
       return view('instituicao.professor.alunos.notas.notas',compact('aluno','notas','title','caminhos'));
     }
 
-    public function create()
+    public function byLancaNotas(Request $request, $id)
     {
-      $title = "Cadastrando Notas";
 
-      $alunos = Aluno::pluck('nome','id');
+      $aluno = Aluno::find($id);
 
-      return view('instituicao.professor.alunos..notas.nota-create',compact('title','alunos'));
+      $alunos = Aluno::where('id',$request->segment(2))
+          ->pluck('nome', 'id');
+
+
+      //  dd($alunos['nome']);
+
+      $notas = $aluno->notas()->get();
+
+      $caminhos = [
+              ['url'=>'/home','titulo'=>'Home'],
+              ['url'=>'/minhas-disciplinas','titulo'=>'Disciplinas'],
+              ['url'=>route('professor.disciplina.alunos',$aluno->disciplina_id),'titulo'=>'Alunos'],
+              ['url'=>'','titulo'=>'Notas'],
+      ];
+
+      $title = "NOTAS - {$aluno->nome}";
+
+      //  dd($request->segment(2));
+
+      return view('instituicao.professor.alunos.notas.nota-create',compact('alunos','notas','title','caminhos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function byEditaNotas(Request $request, $id)
+    {
+
+      $aluno = Aluno::find($id);
+
+      $alunos = Aluno::where('id',$request->segment(2))
+          ->pluck('nome', 'id');
+
+
+      //  dd($alunos['nome']);
+
+      $nota = Nota::join('alunos','alunos.id','=','notas.aluno_id')
+                  ->where('alunos.id',$request->segment(2))
+                  ->select('notas.id',
+                           'notas.aluno_id',
+                           'notas.av3_1',
+                           'notas.av3_2',
+                           'notas.obs_av3_1',
+                           'notas.obs_av3_2',
+                           'notas.avi',
+                           'notas.av5'
+                   )->get()->first();
+
+      $caminhos = [
+              ['url'=>'/home','titulo'=>'Home'],
+              ['url'=>'/minhas-disciplinas','titulo'=>'Disciplinas'],
+              ['url'=>route('professor.disciplina.alunos',$aluno->disciplina_id),'titulo'=>'Alunos'],
+              ['url'=>'','titulo'=>'Notas'],
+      ];
+
+      $title = "NOTAS - {$aluno->nome}";
+
+      //  dd($request->segment(2));
+
+      return view('instituicao.professor.alunos.notas.nota-edit',compact('alunos','nota','title','caminhos'));
+    }
+
     public function store(Request $request)
     {
       $dataForm = $request->all();

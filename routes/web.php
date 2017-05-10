@@ -26,11 +26,17 @@ $this->group(['middleware'=>'auth'],function(){
 
   //Gestão de acadêmicos
   $this->get('disciplina/{id}/alunos', 'AlunoController@byDisciplinaId')->name('professor.disciplina.alunos'); //rota especifica pra modulo
-  $this->post('alunos-search','AlunoController@alunosSearch')->name('professor.disciplinas.alunos.search');
+
+  $this->any('alunos-search','AlunoController@alunosSearch')->name('professor.disciplinas.alunos.search');
+
   $this->resource('alunos','AlunoController', ['except'=>'index']);
 
   //Gestão de notas
   $this->get('aluno/{id}/notas', 'NotaController@byAlunoId')->name('professor.disciplina.alunos.notas');
+
+  $this->get('aluno/{id}/lancanotas', 'NotaController@byLancaNotas')->name('professor.disciplina.alunos.lancanotas');
+
+  $this->get('aluno/{id}/editanotas', 'NotaController@byEditaNotas')->name('professor.disciplina.alunos.editanotas');
   // $this->resource('aluno/{id}/notas', 'NotaController');
-  $this->resource('notas','NotaController', ['except'=>'index']);
+  $this->resource('notas','NotaController', ['except'=>'index','create','edit']);
 });

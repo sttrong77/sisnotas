@@ -11,7 +11,7 @@
     <h3> {{$title or 'Notas do Aluno'}} </h3>
 
 
-    <a class="waves-effect waves-light btn" href="{{route('notas.create')}}">
+    <a class="waves-effect waves-light btn" href="{{route('professor.disciplina.alunos.lancanotas',Request::segment(2))}}">
       <i class="material-icons left">person_pin</i>
       Cadastrar
     </a>
@@ -35,7 +35,7 @@
              <p>Total -> {{$nota->av3_1 + $nota->av3_2 + $nota->avi + $nota->av5}}</p>
            </div>
            <div class="card-action">
-             <a href="{{route('notas.edit', $nota->id)}}">
+             <a href="{{route('professor.disciplina.alunos.editanotas', Request::segment(2))}}">
                <i class="material-icons left">mode_edit</i>
              </a>
            </div>
