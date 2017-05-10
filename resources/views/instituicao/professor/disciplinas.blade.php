@@ -42,12 +42,10 @@
     </div>
     @endforeach
   </div>
-   <ul class="pagination">
     @if(isset($dataForm))
       {!! $disciplinas->appends($dataForm)->links() !!}
     @else
       {!! $disciplinas->links() !!}
     @endif
-   </ul>
 </div>
 @endsection

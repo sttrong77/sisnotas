@@ -51,14 +51,11 @@
         @endforeach
        </tbody>
      </table>
-
-     <ul class="pagination">
        @if(isset($dataForm))
         {!! $alunos->appends($dataForm)->links() !!}
        @else
          {!! $alunos->links() !!}
        @endif
-      </ul>
 
 
 
